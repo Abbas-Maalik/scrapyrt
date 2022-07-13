@@ -119,6 +119,15 @@ class RealtimeApi(ServiceResource):
             self.putChild(route, resource_cls(self, **kwargs))
 
 
+class HealthCheck(ServiceResource):
+
+    isLeaf = True
+    allowedMethods = ['GET']
+
+    def render_GET(self, *args, **kwargs):
+        return {'status': 'ok'}
+
+
 class CrawlResource(ServiceResource):
 
     isLeaf = True

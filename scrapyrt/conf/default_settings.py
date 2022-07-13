@@ -22,6 +22,7 @@ SERVICE_ROOT = 'scrapyrt.resources.RealtimeApi'
 # Resources list
 RESOURCES = {
     'crawl.json': 'scrapyrt.resources.CrawlResource',
+    'health': 'scrapyrt.resources.HealthResource',
 }
 
 CRAWL_MANAGER = 'scrapyrt.core.CrawlManager'
