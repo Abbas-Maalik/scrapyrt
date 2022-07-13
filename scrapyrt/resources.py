@@ -119,7 +119,7 @@ class RealtimeApi(ServiceResource):
             self.putChild(route, resource_cls(self, **kwargs))
 
 
-class HealthCheck(ServiceResource):
+class HealthResource(ServiceResource):
 
     isLeaf = True
     allowedMethods = ['GET']
