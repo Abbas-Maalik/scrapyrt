@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import OrderedDict
 from copy import deepcopy
+from urllib.parse import urlparse
 import datetime
 import os
 
@@ -135,6 +136,22 @@ class CrawlManager(object):
             raise Error('404', message=str(e))
         dfd.addCallback(self.return_items)
         return dfd
+
+    def get_spider_domain_map(self, *args, **kwargs):
+        self.crawler_process = ScrapyrtCrawlerProcess(
+            self.get_project_settings(), self)
+
+        spider_domain_map = {}
+        for spider_name, class_obj in self.crawler_process.spider_loader._spiders.items():
+            if 'parser' not in spider_name or 'generic-' in spider_name:
+                continue
+
+            try:
+                spider_domain_map[urlparse(class_obj.start_urls[0]).netloc] = spider_name
+            except:
+                pass
+
+        return spider_domain_map
 
     def _get_log_file_path(self):
         log_dir = os.path.join(self.log_dir, self.spider_name)

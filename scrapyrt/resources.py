@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from urllib.parse import unquote
+from urllib.parse import unquote, urlparse
 
 from scrapy.utils.misc import load_object
 from scrapy.utils.serialize import ScrapyJSONEncoder
@@ -281,3 +281,32 @@ class CrawlResource(ServiceResource):
         if errors:
             response["errors"] = errors
         return response
+
+
+class IntelligentCrawlResource(ServiceResource):
+
+    crawler = CrawlResource()
+    isLeaf = True
+    allowedMethods = ['GET']
+    default_spider_name = 'generic-parser'
+
+    def render_GET(self, request, **kwargs):
+        api_params = dict(
+            (name.decode('utf-8'), value[0].decode('utf-8'))
+            for name, value in request.args.items()
+        )
+        url = api_params['url']
+        url_domain = urlparse(url).netloc
+
+        crawl_manager_cls = load_object(app_settings.CRAWL_MANAGER)
+        manager = crawl_manager_cls('spider_name', {})
+        spider_domain_map = manager.get_spider_domain_map()
+        spider_name = spider_domain_map.get(url_domain, self.default_spider_name)
+
+        request.args = {
+            b'crawl_args': [f'%7B%22url%22%3A%22{url}%22%7D%0A'.encode()],
+            b'spider_name': [spider_name.encode()],
+            b'start_requests': [b'true']
+        }
+
+        return self.crawler.render_GET(request, **kwargs)
