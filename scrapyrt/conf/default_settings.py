@@ -2,6 +2,8 @@
 """Default scrapyrt settings."""
 
 # Project settings module - found at server initialization
+import scrapyrt.resources
+
 PROJECT_SETTINGS = None
 
 # Path to server log file
@@ -24,6 +26,7 @@ RESOURCES = {
     'crawl.json': 'scrapyrt.resources.CrawlResource',
     'health': 'scrapyrt.resources.HealthResource',
     'intelligent-crawl': 'scrapyrt.resources.IntelligentCrawlResource',
+    'active-domains': 'scrapyrt.resources.ActiveDomainsResource',
 }
 
 CRAWL_MANAGER = 'scrapyrt.core.CrawlManager'

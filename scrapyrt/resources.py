@@ -310,3 +310,23 @@ class IntelligentCrawlResource(ServiceResource):
         }
 
         return self.crawler.render_GET(request, **kwargs)
+
+
+class ActiveDomainsResource(ServiceResource):
+    """
+    Returns a list of domains from start urls of all spider present in the code that have
+    'parser' in their names.
+    """
+    isLeaf = True
+    allowedMethods = ['GET']
+
+    def render_GET(self, request, **kwargs):
+        crawl_manager_cls = load_object(app_settings.CRAWL_MANAGER)
+        manager = crawl_manager_cls('spider_name', {})
+        spider_domain_map = manager.get_spider_domain_map()
+        response = {
+            "status": "ok",
+            "domains": [d for d in spider_domain_map.keys()],
+        }
+
+        return response

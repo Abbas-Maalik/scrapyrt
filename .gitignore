@@ -27,6 +27,7 @@ coverage.xml
 # IDE
 /.idea/
 .vscode
+.DS_Store
 
 # tests
 .coverage
