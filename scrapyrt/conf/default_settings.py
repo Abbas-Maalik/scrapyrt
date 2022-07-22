@@ -2,8 +2,6 @@
 """Default scrapyrt settings."""
 
 # Project settings module - found at server initialization
-import scrapyrt.resources
-
 PROJECT_SETTINGS = None
 
 # Path to server log file
